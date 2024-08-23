@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import { onCloseDateModal, onOpenDateModal } from "../store";
-import { isDate } from "date-fns";
 
 export const useUiStore = () => {
   const dispatch = useDispatch();
