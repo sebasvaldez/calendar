@@ -24,7 +24,7 @@ Modal.setAppElement("#root");
 
 export const CalendarModal = () => {
   const { isDateModalOpen, closeDateModal } = useUiStore();
-  const {activeEvent} = useCalendarStore();
+  const { activeEvent, startSavingEvent } = useCalendarStore();
 
   const [formSubmitted, setFormSubmitted] = useState(false);
 
@@ -40,13 +40,11 @@ export const CalendarModal = () => {
     return formValues.title.length > 0 ? "is-valid" : "is-invalid";
   }, [formValues.title, formSubmitted]);
 
-
   useEffect(() => {
-    if (activeEvent!== null) {
-      setFormValues({...activeEvent});
+    if (activeEvent !== null) {
+      setFormValues({ ...activeEvent });
     }
-  }, [activeEvent])
-  
+  }, [activeEvent]);
 
   const onInputChange = ({ target }) => {
     setFormValues({
@@ -67,8 +65,8 @@ export const CalendarModal = () => {
     });
   };
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = (event) => {
+    event.preventDefault();
     setFormSubmitted(true);
     const difference = differenceInSeconds(formValues.end, formValues.start);
 
@@ -85,12 +83,14 @@ export const CalendarModal = () => {
       console.log("Titulo muy corto");
       return;
     }
-    console.log(formValues);
 
     //TODO
+    startSavingEvent(formValues);
     //Cerrar Modal
+    closeDateModal();
     //Remover errores de pantalla
   };
+
   return (
     <Modal
       isOpen={isDateModalOpen}
@@ -162,9 +162,7 @@ export const CalendarModal = () => {
           </small>
         </div>
 
-        <button type="submit" className="btn btn-outline-primary btn-block"
-        
-        >
+        <button type="submit" className="btn btn-outline-primary btn-block">
           <i className="far fa-save"></i>
           <span> Guardar</span>
         </button>

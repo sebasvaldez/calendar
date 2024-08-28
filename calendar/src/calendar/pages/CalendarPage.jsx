@@ -1,22 +1,17 @@
 import { useState } from "react";
-import { CalendarEventBox, CalendarModal, Navbar } from "../";
+import { CalendarEventBox, CalendarModal, FabAddNew, Navbar } from "../";
 import { Calendar } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { localizer, getMessagesES } from "../../helpers";
 import { useUiStore, useCalendarStore } from "../../hooks";
 
-
-
-
-
 export const CalendarPage = () => {
+  const { openDateModal } = useUiStore();
+  const { events, setActiveEvent } = useCalendarStore();
 
-  const {openDateModal} = useUiStore()
-  const {events, setActiveEvent}=useCalendarStore()
-
-  const [lastView, setLastView ] = useState(localStorage.getItem('lastView') || 'month')
-
-
+  const [lastView, setLastView] = useState(
+    localStorage.getItem("lastView") || "month"
+  );
 
   const eventStyleGetter = (event, start, end, isSelected) => {
     const style = {
@@ -30,25 +25,20 @@ export const CalendarPage = () => {
     };
   };
 
+  const onDoubleClick = (e) => {
+    openDateModal();
+  };
 
-  const onDoubleClick = (e)=>{
-    console.log({doubleClick:e})
-    openDateModal()
-  }
-
-  const onSelect= (e)=>{
+  const onSelect = (e) => {
     // console.log({click:e})
-    setActiveEvent(e)
-  }
+    setActiveEvent(e);
+  };
 
-  const onViewChanged= (e)=>{
-    localStorage.setItem('lastView', e)
+  const onViewChanged = (e) => {
+    localStorage.setItem("lastView", e);
 
-    console.log({viewChanged:e})
-  }
-
-
-
+    console.log({ viewChanged: e });
+  };
 
   return (
     <>
@@ -63,12 +53,13 @@ export const CalendarPage = () => {
         style={{ height: "calc(100vh - 85px)" }}
         messages={getMessagesES()}
         eventPropGetter={eventStyleGetter}
-        components={{event: CalendarEventBox}}
+        components={{ event: CalendarEventBox }}
         onDoubleClickEvent={onDoubleClick}
         onSelectEvent={onSelect}
         onView={onViewChanged}
       />
       <CalendarModal />
+      <FabAddNew />
     </>
   );
 };
